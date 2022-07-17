@@ -9,7 +9,7 @@ data class Client(
     val email: String,
     val appName: String,
     val appType: AppType,
-    val apiKey: String? = null
+    val apiKey: String
 )
 
 @Serializable
