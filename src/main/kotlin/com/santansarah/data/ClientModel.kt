@@ -6,10 +6,10 @@ import org.jetbrains.exposed.sql.Table
 @Serializable
 data class Client(
     val id: Int,
-    val email: String,
-    val appName: String,
+    val email: String = "",
+    val appName: String = "",
     val appType: AppType,
-    val apiKey: String
+    val apiKey: String = ""
 )
 
 @Serializable

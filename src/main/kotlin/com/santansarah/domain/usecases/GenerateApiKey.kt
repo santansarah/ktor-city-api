@@ -1,4 +1,4 @@
-package com.santansarah.domain
+package com.santansarah.domain.usecases
 
 import java.security.SecureRandom
 

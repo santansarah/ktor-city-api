@@ -1,9 +1,11 @@
-package com.santansarah.domain
+package com.santansarah.domain.usecases
 
 import com.santansarah.data.Client
 import com.santansarah.data.ClientDao
+import com.santansarah.domain.ClientErrors
+import com.santansarah.domain.ClientResult
 
-class ValidateEmailUseCase(
+class ValidateClientEmail(
     val clientDao: ClientDao
 ) {
 
@@ -21,13 +23,8 @@ class ValidateEmailUseCase(
 
         var clientResult: ClientResult = ClientResult.Success
 
-        if (client.email.isNotEmpty() && client.email.matches(emailAddressRegex)) {
-            //check to see if email exists with this client combo
-            if (clientDao.doesClientExist(client))
-                clientResult = ClientResult.Failure(ClientErrors.clientExists)
-        } else {
+        if (client.email.isBlank() || !client.email.matches(emailAddressRegex))
             clientResult = ClientResult.Failure(ClientErrors.invalidEmail)
-        }
 
         return clientResult
     }
