@@ -35,5 +35,8 @@ dependencies {
     implementation "org.xerial:sqlite-jdbc:3.36.0.3"
     implementation "org.slf4j:slf4j-nop:1.7.36"
 
+    // https://mvnrepository.com/artifact/org.mindrot.bcrypt/bcrypt
+    implementation "org.mindrot.bcrypt:bcrypt:0.9"
+
 
 }

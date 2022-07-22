@@ -1,6 +1,6 @@
 package com.santansarah.domain.usecases
 
-import com.santansarah.data.Client
+import com.santansarah.data.User
 import com.santansarah.data.ClientDao
 import com.santansarah.domain.ClientErrors
 import com.santansarah.domain.ClientResult
@@ -19,11 +19,11 @@ class ValidateClientEmail(
                 ")+"
     )
 
-    suspend operator fun invoke(client: Client): ClientResult {
+    suspend operator fun invoke(user: User): ClientResult {
 
         var clientResult: ClientResult = ClientResult.Success
 
-        if (client.email.isBlank() || !client.email.matches(emailAddressRegex))
+        if (user.email.isBlank() || !user.email.matches(emailAddressRegex))
             clientResult = ClientResult.Failure(ClientErrors.invalidEmail)
 
         return clientResult
