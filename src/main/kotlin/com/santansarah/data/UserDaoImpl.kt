@@ -42,7 +42,6 @@ class UserDaoImpl : UserDao {
     }
 
     override suspend fun insertUser(user: User): User? {
-        //var statement : InsertStatement<Number>? = null
         return dbQuery {
             Users
                 .insert {
@@ -53,7 +52,6 @@ class UserDaoImpl : UserDao {
                     resultRowToUser(it)
                 }
         }
-        //return statement?.resultedValues?.singleOrNull()?.let(::resultRowToClient)
     }
 
     override suspend fun getUserWithApp(apiKey: String): UserWithApp? {

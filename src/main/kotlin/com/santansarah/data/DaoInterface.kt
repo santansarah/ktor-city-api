@@ -8,7 +8,7 @@ interface UserDao {
 }
 
 interface UserAppDao {
-    suspend fun doesApiKeyExist(): Boolean
-    suspend fun insertUserApp(): UserApp?
+    suspend fun doesApiKeyExist(apiKey: String): Boolean
+    suspend fun insertUserApp(userApp: UserApp): UserApp?
 
 }
