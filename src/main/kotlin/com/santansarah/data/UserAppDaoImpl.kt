@@ -29,7 +29,8 @@ class UserAppDaoImpl : UserAppDao {
         return apiKeyExists
         */
         /**
-         * Exposed has an [exists] fun, but it doesn't return a boolean!
+         * Exposed has an [exists] fun, but it doesn't return a boolean in
+         * the right type of way.
          * There are a few ways to do this; I like this one.
          */
        return dbQuery {

@@ -43,6 +43,7 @@ enum class AppType(val value: Int) {
 object Users : Table() {
     val userId = integer("userId").autoIncrement()
     val email = varchar("email", 255)
+        .uniqueIndex()
     val userCreateDate = varchar("userCreateDate", length = 255)
 
     override val primaryKey = PrimaryKey(userId)

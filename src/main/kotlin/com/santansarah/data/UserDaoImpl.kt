@@ -1,10 +1,13 @@
 package com.santansarah.data
 
 import com.santansarah.data.DatabaseFactory.dbQuery
+import jdk.nashorn.internal.runtime.regexp.joni.Config.log
+import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
+import sun.rmi.runtime.Log
 
 class UserDaoImpl : UserDao {
 
@@ -25,7 +28,7 @@ class UserDaoImpl : UserDao {
         email = row[Users.email],
         userCreateDate = row[Users.userCreateDate],
         userAppId = row[UserApps.userAppId],
-        appName =  row[UserApps.appName],
+        appName = row[UserApps.appName],
         appType = row[UserApps.appType],
         apiKey = row[UserApps.apiKey],
         appCreateDate = row[UserApps.userAppCreateDate]
@@ -41,16 +44,21 @@ class UserDaoImpl : UserDao {
         }
     }
 
-    override suspend fun insertUser(user: User): User? {
-        return dbQuery {
-            Users
-                .insert {
-                    it[email] = user.email
-                    it[userCreateDate] = user.userCreateDate
-                }
-                .resultedValues?.singleOrNull()?.let {
-                    resultRowToUser(it)
-                }
+    override suspend fun insertUser(user: User): ExposedResult<User> {
+        return try {
+            dbQuery {
+                Users
+                    .insert {
+                        it[email] = user.email
+                        it[userCreateDate] = user.userCreateDate
+                    }
+                    .resultedValues?.singleOrNull()?.let {
+                        ExposedResult.Success(resultRowToUser(it))
+                    } ?: ExposedResult.Error(user, "Error inserting new user. Try again.")
+            }
+        } catch (e: ExposedSQLException) {
+            println(e)
+            ExposedResult.Error(user, "Database error.")
         }
     }
 

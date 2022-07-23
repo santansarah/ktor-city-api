@@ -1,13 +1,11 @@
 package com.santansarah.domain.usecases
 
 import com.santansarah.data.User
-import com.santansarah.data.ClientDao
+import com.santansarah.data.UserDao
 import com.santansarah.domain.ClientErrors
-import com.santansarah.domain.ClientResult
+import com.santansarah.domain.UserResult
 
-class ValidateClientEmail(
-    val clientDao: ClientDao
-) {
+class ValidateUserEmail() {
 
     private val emailAddressRegex = Regex(
         "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
@@ -19,14 +17,14 @@ class ValidateClientEmail(
                 ")+"
     )
 
-    suspend operator fun invoke(user: User): ClientResult {
+    operator fun invoke(user: User): UserResult {
 
-        var clientResult: ClientResult = ClientResult.Success
+        var userResult: UserResult = UserResult.Success
 
         if (user.email.isBlank() || !user.email.matches(emailAddressRegex))
-            clientResult = ClientResult.Failure(ClientErrors.invalidEmail)
+            userResult = UserResult.Failure(ClientErrors.invalidEmail)
 
-        return clientResult
+        return userResult
     }
 
 }

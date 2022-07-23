@@ -32,9 +32,9 @@ object ClientErrors {
 /**
  * Use case results.
  */
-sealed class ClientResult {
-    object Success : ClientResult()
-    data class Failure(val error: AppErrorCodes) : ClientResult()
+sealed class UserResult {
+    object Success : UserResult()
+    data class Failure(val error: AppErrorCodes) : UserResult()
 }
 
 
