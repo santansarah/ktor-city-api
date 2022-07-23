@@ -5,5 +5,5 @@ import com.santansarah.data.User
 @kotlinx.serialization.Serializable
 data class UserResponse(
     val user: User,
-    val errors: List<AppErrorCodes>
+    val errors: List<AppErrorCodes> = emptyList()
 )

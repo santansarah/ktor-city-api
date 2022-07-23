@@ -5,10 +5,11 @@ import kotlinx.serialization.Serializable
 /**
  * Types of errors we can get for a Client.
  */
-enum class ErrorCode(val errId: Int) {
-    INVALID_EMAIL(900),
-    CLIENT_EXISTS(901),
-    API_KEY(902)
+enum class ErrorCode {
+    INVALID_EMAIL,
+    EMAIL_EXISTS,
+    API_KEY,
+    UNKNOWN
 }
 
 /**
@@ -23,10 +24,11 @@ data class AppErrorCodes(
 /**
  * Singleton - Client error codes with friendly message.
  */
-object ClientErrors {
+object UserErrors {
     val invalidEmail = AppErrorCodes(ErrorCode.INVALID_EMAIL, "Invalid email.")
-    val clientExists = AppErrorCodes(ErrorCode.CLIENT_EXISTS, "Client exists. Email, App Name, and App Type must be unique.")
-    val apiKeyExists = AppErrorCodes(ErrorCode.API_KEY, "There was a problem generating your API Key. Try again.")
+    val userExists = AppErrorCodes(ErrorCode.EMAIL_EXISTS, "This email address is already registered.")
+    val databaseError = AppErrorCodes(ErrorCode.UNKNOWN, "Unknown database error. Try again, and check your parameters.")
+    //val apiKeyExists = AppErrorCodes(ErrorCode.API_KEY, "There was a problem generating your API Key. Try again.")
 }
 
 /**

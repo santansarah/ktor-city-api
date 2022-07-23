@@ -2,7 +2,7 @@ package com.santansarah.domain.usecases
 
 import com.santansarah.data.User
 import com.santansarah.data.UserDao
-import com.santansarah.domain.ClientErrors
+import com.santansarah.domain.UserErrors
 import com.santansarah.domain.UserResult
 
 class ValidateUniqueClient(
@@ -13,9 +13,11 @@ class ValidateUniqueClient(
 
         var userResult: UserResult = UserResult.Success
 
+/*
         var dbClient = userDao.doesUserExist(user.email)
         if (dbClient != null)
-            userResult = UserResult.Failure(ClientErrors.clientExists)
+            userResult = UserResult.Failure(UserErrors.clientExists)
+*/
 
         return userResult
     }

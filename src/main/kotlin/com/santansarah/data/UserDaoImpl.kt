@@ -1,13 +1,11 @@
 package com.santansarah.data
 
 import com.santansarah.data.DatabaseFactory.dbQuery
-import jdk.nashorn.internal.runtime.regexp.joni.Config.log
+import com.santansarah.domain.UserErrors
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
-import sun.rmi.runtime.Log
 
 class UserDaoImpl : UserDao {
 
@@ -54,11 +52,11 @@ class UserDaoImpl : UserDao {
                     }
                     .resultedValues?.singleOrNull()?.let {
                         ExposedResult.Success(resultRowToUser(it))
-                    } ?: ExposedResult.Error(user, "Error inserting new user. Try again.")
+                    } ?: ExposedResult.Error(user, UserErrors.databaseError)
             }
         } catch (e: ExposedSQLException) {
-            println(e)
-            ExposedResult.Error(user, "Database error.")
+            println("exception from insert function: ${e.errorCode}")
+            ExposedResult.Error(user, UserErrors.userExists)
         }
     }
 

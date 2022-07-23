@@ -1,6 +1,8 @@
 package com.santansarah.data
 
-sealed class ExposedResult<T>(val data: T, val message: String? = null) {
+import com.santansarah.domain.AppErrorCodes
+
+sealed class ExposedResult<T>(val data: T, val appErrorCodes: AppErrorCodes? = null) {
     class Success<T>(data: T) : ExposedResult<T>(data)
-    class Error<T>(data: T, message: String) : ExposedResult<T>(data, message)
+    class Error<T>(data: T, appErrorCodes: AppErrorCodes) : ExposedResult<T>(data, appErrorCodes)
 }

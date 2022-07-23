@@ -1,8 +1,7 @@
 package com.santansarah.domain.usecases
 
 import com.santansarah.data.User
-import com.santansarah.data.UserDao
-import com.santansarah.domain.ClientErrors
+import com.santansarah.domain.UserErrors
 import com.santansarah.domain.UserResult
 
 class ValidateUserEmail() {
@@ -22,7 +21,7 @@ class ValidateUserEmail() {
         var userResult: UserResult = UserResult.Success
 
         if (user.email.isBlank() || !user.email.matches(emailAddressRegex))
-            userResult = UserResult.Failure(ClientErrors.invalidEmail)
+            userResult = UserResult.Failure(UserErrors.invalidEmail)
 
         return userResult
     }
