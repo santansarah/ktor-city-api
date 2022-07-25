@@ -1,7 +1,10 @@
 package com.santansarah.data
 
 import com.santansarah.data.DatabaseFactory.dbQuery
+import com.santansarah.domain.UserAppErrors
+import com.santansarah.domain.UserErrors
 import kotlinx.coroutines.selects.select
+import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
@@ -20,6 +23,32 @@ class UserAppDaoImpl : UserAppDao {
         apiKey = row[UserApps.apiKey],
         appCreateDate = row[UserApps.userAppCreateDate]
     )
+
+    override suspend fun doesAppExist(userApp: UserApp): ExposedResult<Boolean> {
+        return try {
+            return ExposedResult.Success(!dbQuery {
+                UserApps.select {
+                    (UserApps.userId eq userApp.userId) and
+                            (UserApps.appName eq userApp.appName) and
+                            (UserApps.appType eq userApp.appType)
+                }.empty()
+            })
+        }
+        catch (e: ExposedSQLException) {
+            ExposedResult.Error(false, UserAppErrors.databaseError)
+        }
+    }
+
+    override suspend fun getUserWithApp(apiKey: String): UserWithApp? {
+        return dbQuery {
+            (Users innerJoin UserApps).select {
+                UserApps.apiKey eq apiKey
+            }
+                .map(::resultRowToUserWithApp)
+                .singleOrNull()
+        }
+    }
+
 
     override suspend fun doesApiKeyExist(apiKey: String): Boolean {
         /*var apiKeyExists = false

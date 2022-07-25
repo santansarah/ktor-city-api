@@ -1,16 +1,15 @@
 package com.santansarah
 
 import com.santansarah.data.DatabaseFactory
-import com.santansarah.data.UserAppDaoImpl
 import com.santansarah.data.UserDao
 import com.santansarah.data.UserDaoImpl
-import com.santansarah.domain.AppErrorCodes
-import com.santansarah.domain.ErrorCode
 import com.santansarah.domain.usecases.InsertNewUser
 import com.santansarah.domain.usecases.ValidateUserEmail
+import com.santansarah.plugins.configureRouting
+import com.santansarah.plugins.configureSecurity
+import com.santansarah.plugins.configureSerialization
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import com.santansarah.plugins.*
 
 fun main() {
 

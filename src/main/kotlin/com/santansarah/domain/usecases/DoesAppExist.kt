@@ -2,16 +2,15 @@ package com.santansarah.domain.usecases
 
 import com.santansarah.data.User
 import com.santansarah.data.UserDao
-import com.santansarah.domain.UserErrors
-import com.santansarah.domain.UserResult
+import com.santansarah.utils.UseCaseResult
 
-class ValidateUniqueClient(
+class DoesAppExist(
     private val userDao: UserDao
 ) {
 
-    suspend operator fun invoke(user: User): UserResult {
+    suspend operator fun invoke(user: User): UseCaseResult {
 
-        var userResult: UserResult = UserResult.Success
+        var userResult: UseCaseResult = UseCaseResult.Success
 
 /*
         var dbClient = userDao.doesUserExist(user.email)

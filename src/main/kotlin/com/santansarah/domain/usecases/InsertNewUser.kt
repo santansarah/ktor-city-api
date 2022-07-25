@@ -3,9 +3,9 @@ package com.santansarah.domain.usecases
 import com.santansarah.data.ExposedResult
 import com.santansarah.data.User
 import com.santansarah.data.UserDao
-import com.santansarah.domain.UserErrors
+import com.santansarah.domain.AppErrors
 import com.santansarah.domain.UserResponse
-import com.santansarah.domain.UserResult
+import com.santansarah.utils.UseCaseResult
 import com.santansarah.utils.toDatabaseString
 import java.time.LocalDateTime
 
@@ -19,7 +19,7 @@ class InsertNewUser
         var userResponse: UserResponse
 
         return when (val result = validateUserEmail(user)) {
-            is UserResult.Success -> {
+            is UseCaseResult.Success -> {
                 val dbResult = userDao.insertUser(user.copy(
                     userCreateDate = LocalDateTime.now().toDatabaseString())
                 )
@@ -28,11 +28,11 @@ class InsertNewUser
                     is ExposedResult.Error -> UserResponse(user,
                     dbResult.appErrorCodes?.let {
                         listOf(it)
-                    } ?: listOf(UserErrors.databaseError))
+                    } ?: listOf(AppErrors.databaseError))
                 }
 
             }
-            is UserResult.Failure -> {
+            is UseCaseResult.Failure -> {
                 UserResponse(user, listOf( result.error))
             }
         }

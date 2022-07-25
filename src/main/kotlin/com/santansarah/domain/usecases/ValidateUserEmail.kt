@@ -1,8 +1,8 @@
 package com.santansarah.domain.usecases
 
 import com.santansarah.data.User
-import com.santansarah.domain.UserErrors
-import com.santansarah.domain.UserResult
+import com.santansarah.domain.AppErrors
+import com.santansarah.utils.UseCaseResult
 
 class ValidateUserEmail() {
 
@@ -16,14 +16,12 @@ class ValidateUserEmail() {
                 ")+"
     )
 
-    operator fun invoke(user: User): UserResult {
+    operator fun invoke(user: User): UseCaseResult {
 
-        var userResult: UserResult = UserResult.Success
-
-        if (user.email.isBlank() || !user.email.matches(emailAddressRegex))
-            userResult = UserResult.Failure(UserErrors.invalidEmail)
-
-        return userResult
+     return if (user.email.isBlank() || !user.email.matches(emailAddressRegex))
+            UseCaseResult.Failure(AppErrors.invalidEmail)
+        else
+            UseCaseResult.Success
     }
 
 }
