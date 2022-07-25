@@ -11,7 +11,7 @@ class DoesUserExist(
     suspend operator fun invoke(user: User): UserResponse {
 
         return when (val dbResult = userDao.getUser(user)) {
-            is ExposedResult.Success -> UserResponse(dbResult.data, emptyList())
+            is ExposedResult.Success -> UserResponse(dbResult.data)
             is ExposedResult.Error -> UserResponse(dbResult.data, listOf(dbResult.appErrorCodes!!))
         }
     }

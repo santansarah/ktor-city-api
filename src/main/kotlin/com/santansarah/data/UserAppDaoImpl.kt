@@ -1,12 +1,12 @@
 package com.santansarah.data
 
 import com.santansarah.data.DatabaseFactory.dbQuery
-import com.santansarah.domain.UserAppErrors
-import com.santansarah.domain.UserErrors
-import kotlinx.coroutines.selects.select
+import com.santansarah.domain.AppErrors
 import org.jetbrains.exposed.exceptions.ExposedSQLException
-import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.exists
+import org.jetbrains.exposed.sql.select
 
 class UserAppDaoImpl : UserAppDao {
 
@@ -24,18 +24,22 @@ class UserAppDaoImpl : UserAppDao {
         appCreateDate = row[UserApps.userAppCreateDate]
     )
 
-    override suspend fun doesAppExist(userApp: UserApp): ExposedResult<Boolean> {
+    override suspend fun checkForDupApp(userApp: UserApp): ExposedResult<Boolean> {
         return try {
-            return ExposedResult.Success(!dbQuery {
+            val isEmpty = dbQuery {
                 UserApps.select {
                     (UserApps.userId eq userApp.userId) and
                             (UserApps.appName eq userApp.appName) and
                             (UserApps.appType eq userApp.appType)
                 }.empty()
-            })
+            }
+            if (isEmpty)
+                ExposedResult.Success(false)
+            else
+                ExposedResult.Error(true, AppErrors.appExists)
         }
         catch (e: ExposedSQLException) {
-            ExposedResult.Error(false, UserAppErrors.databaseError)
+            ExposedResult.Error(false, AppErrors.databaseError)
         }
     }
 

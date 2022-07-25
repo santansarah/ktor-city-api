@@ -1,7 +1,7 @@
 package com.santansarah.data
 
 import com.santansarah.data.DatabaseFactory.dbQuery
-import com.santansarah.domain.UserErrors
+import com.santansarah.domain.AppErrors
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.and
@@ -33,21 +33,11 @@ class UserDaoImpl : UserDao {
         appCreateDate = row[UserApps.userAppCreateDate]
     )
 
-    override suspend fun doesEmailExist(email: String): User? {
-        return dbQuery {
-            Users.select {
-                (Users.email eq email)
-            }
-                .map(::resultRowToUser)
-                .singleOrNull()
-        }
-    }
-
     override suspend fun getUser(user: User): ExposedResult<User> {
         return try {
             val dbUser = dbQuery {
                 Users.select {
-                    (Users.userId eq user.userId) and (Users.userId eq user.userId)
+                    (Users.userId eq user.userId) and (Users.email eq user.email)
                 }.map(::resultRowToUser)
                     .single()
             }
@@ -59,10 +49,10 @@ class UserDaoImpl : UserDao {
             } ?: ExposedResult.Error(user, UserErrors.unknownUser)*/
         }
         catch (e: NoSuchElementException) {
-            ExposedResult.Error(user, UserErrors.unknownUser)
+            ExposedResult.Error(user, AppErrors.unknownUser)
         }
         catch (e: ExposedSQLException) {
-            ExposedResult.Error(user, UserErrors.databaseError)
+            ExposedResult.Error(user, AppErrors.databaseError)
         }
     }
 
@@ -76,7 +66,7 @@ class UserDaoImpl : UserDao {
                     }
                     .resultedValues?.singleOrNull()?.let {
                         ExposedResult.Success(resultRowToUser(it))
-                    } ?: ExposedResult.Error(user, UserErrors.databaseError)
+                    } ?: ExposedResult.Error(user, AppErrors.databaseError)
             }
         } catch (e: ExposedSQLException) {
             /**
@@ -85,9 +75,9 @@ class UserDaoImpl : UserDao {
              */
             println("exception from insert function: ${e.errorCode}")
             if (e.errorCode == 19)
-                ExposedResult.Error(user, UserErrors.userExists)
+                ExposedResult.Error(user, AppErrors.userExists)
             else
-                ExposedResult.Error(user, UserErrors.databaseError)
+                ExposedResult.Error(user, AppErrors.databaseError)
         }
     }
 

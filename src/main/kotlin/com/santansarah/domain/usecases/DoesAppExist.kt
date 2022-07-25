@@ -1,24 +1,19 @@
 package com.santansarah.domain.usecases
 
-import com.santansarah.data.User
-import com.santansarah.data.UserDao
+import com.santansarah.data.ExposedResult
+import com.santansarah.data.UserApp
+import com.santansarah.data.UserAppDao
 import com.santansarah.utils.UseCaseResult
 
 class DoesAppExist(
-    private val userDao: UserDao
+    private val userAppDao: UserAppDao
 ) {
+    suspend operator fun invoke(userApp: UserApp): UseCaseResult {
 
-    suspend operator fun invoke(user: User): UseCaseResult {
-
-        var userResult: UseCaseResult = UseCaseResult.Success
-
-/*
-        var dbClient = userDao.doesUserExist(user.email)
-        if (dbClient != null)
-            userResult = UserResult.Failure(UserErrors.clientExists)
-*/
-
-        return userResult
+        return when (val dbResult = userAppDao.checkForDupApp(userApp)) {
+            is ExposedResult.Success -> UseCaseResult.Success
+            is ExposedResult.Error -> UseCaseResult.Failure(dbResult.appErrorCodes!!)
+        }
     }
 
 }
