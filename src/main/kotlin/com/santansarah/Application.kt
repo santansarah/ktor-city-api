@@ -5,22 +5,23 @@ import com.santansarah.data.UserDao
 import com.santansarah.data.UserDaoImpl
 import com.santansarah.domain.usecases.InsertNewUser
 import com.santansarah.domain.usecases.ValidateUserEmail
-import com.santansarah.plugins.configureRouting
-import com.santansarah.plugins.configureSecurity
-import com.santansarah.plugins.configureSerialization
+import com.santansarah.plugins.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import org.koin.core.Koin
+import io.ktor.server.application.*
+
 
 fun main() {
 
     embeddedServer(Netty, port = 8080, host = "127.0.0.1") {
         DatabaseFactory.init()
 
-        val userDao: UserDao = UserDaoImpl()
-        val validateUserEmail = ValidateUserEmail()
-        val insertNewUser = InsertNewUser(validateUserEmail, userDao)
-
-        configureRouting(insertNewUser)
+        //val userDao: UserDao = UserDaoImpl()
+        //val validateUserEmail = ValidateUserEmail()
+        //val insertNewUser = InsertNewUser(validateUserEmail, userDao)
+        configureKoin()
+        configureRouting()
         configureSerialization()
         configureSecurity()
 

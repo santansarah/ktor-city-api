@@ -1,28 +1,23 @@
 package com.santansarah.plugins
 
-import com.santansarah.data.UserDaoImpl
 import com.santansarah.domain.usecases.InsertNewUser
-import com.santansarah.getUser
 import com.santansarah.newAccount
-import io.ktor.server.routing.*
-import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
-import io.ktor.server.request.*
+import io.ktor.server.routing.*
+import org.koin.ktor.ext.inject
 
-fun Application.configureRouting(
-    insertNewUser: InsertNewUser
-) {
+fun Application.configureRouting() {
 
     routing {
         get("/") {
             call.respondText("Hello World!")
         }
 
-        newAccount(insertNewUser)
+        // Lazy inject HelloService from within a Ktor Routing Node
+        val insertService by inject<InsertNewUser>()
 
-        val userDao = UserDaoImpl()
-        getUser(userDao)
+        newAccount(insertService)
 
     }
 }

@@ -17,7 +17,8 @@ object DatabaseFactory {
     }
 
     /**
-     * make our transactions async
+     * Make our transactions async
+     * Starts each query in its own coroutine
      */
     suspend fun <T> dbQuery(block: suspend () -> T): T =
         newSuspendedTransaction(Dispatchers.IO) { block() }

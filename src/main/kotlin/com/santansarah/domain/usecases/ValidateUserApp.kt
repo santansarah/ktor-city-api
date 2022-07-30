@@ -2,17 +2,17 @@ package com.santansarah.domain.usecases
 
 import com.santansarah.data.AppType
 import com.santansarah.data.UserApp
-import com.santansarah.domain.AppErrors
-import com.santansarah.utils.UseCaseResult
+import com.santansarah.utils.ErrorCode
+import com.santansarah.utils.ServiceResult
 
 class ValidateUserApp() {
 
-    operator fun invoke(userApp: UserApp): UseCaseResult {
+    operator fun invoke(userApp: UserApp): ServiceResult<Boolean> {
 
         return if (userApp.appName.isBlank() || userApp.appType == AppType.NOTSET)
-            UseCaseResult.Failure(AppErrors.invalidApp)
+            ServiceResult.Error(ErrorCode.INVALID_APP)
         else
-            UseCaseResult.Success
+            ServiceResult.Success(true)
 
     }
 

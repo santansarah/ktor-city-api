@@ -13,9 +13,12 @@ applicationDefaultJvmArgs = ["-Dio.ktor.development=$isDevelopment"]
 
 repositories {
     mavenLocal()
+    mavenCentral()
+    google()
+   /* mavenLocal()
     google()
     mavenCentral()
-    maven { url "https://maven.pkg.jetbrains.space/public/p/ktor/eap" }
+    maven { url "https://maven.pkg.jetbrains.space/public/p/ktor/eap" }*/
 }
 
 dependencies {
@@ -40,4 +43,9 @@ dependencies {
 
     implementation "at.favre.lib:bcrypt:0.9.0"
 
+    // Koin for Ktor; make sure you go to File...Project Structure
+    // and switch to Java 11 (SDK) vs 1.8
+    implementation "io.insert-koin:koin-ktor:3.2.0"
+    // SLF4J Logger
+    implementation "io.insert-koin:koin-logger-slf4j:$koin_version"
 }

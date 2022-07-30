@@ -1,7 +1,8 @@
 package com.santansarah.data
 
 import com.santansarah.data.DatabaseFactory.dbQuery
-import com.santansarah.domain.AppErrors
+import com.santansarah.utils.ErrorCode
+import com.santansarah.utils.ServiceResult
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.and
@@ -24,7 +25,7 @@ class UserAppDaoImpl : UserAppDao {
         appCreateDate = row[UserApps.userAppCreateDate]
     )
 
-    override suspend fun checkForDupApp(userApp: UserApp): ExposedResult<Boolean> {
+    override suspend fun checkForDupApp(userApp: UserApp): ServiceResult<Boolean> {
         return try {
             val isEmpty = dbQuery {
                 UserApps.select {
@@ -34,12 +35,19 @@ class UserAppDaoImpl : UserAppDao {
                 }.empty()
             }
             if (isEmpty)
-                ExposedResult.Success(false)
+                ServiceResult.Success(false)
             else
-                ExposedResult.Error(true, AppErrors.appExists)
+                ServiceResult.Error(ErrorCode.APP_EXISTS)
         }
-        catch (e: ExposedSQLException) {
-            ExposedResult.Error(false, AppErrors.databaseError)
+        catch (e: Exception) {
+            when (e) {
+                is ExposedSQLException -> {
+                    println("exception from insert function: ${e.errorCode}")
+                    ServiceResult.Error(ErrorCode.DATABASE_ERROR)
+                }
+                is NoSuchElementException -> ServiceResult.Error(ErrorCode.UNKNOWN_USER)
+                else -> ServiceResult.Error(ErrorCode.DATABASE_ERROR)
+            }
         }
     }
 

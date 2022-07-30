@@ -1,27 +1,29 @@
 package com.santansarah.domain.usecases
 
 import com.santansarah.data.User
-import com.santansarah.domain.AppErrors
-import com.santansarah.utils.UseCaseResult
+import com.santansarah.utils.ErrorCode
+import com.santansarah.utils.ServiceResult
 
 class ValidateUserEmail() {
 
-    private val emailAddressRegex = Regex(
-        "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
-                "\\@" +
-                "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
-                "(" +
-                "\\." +
-                "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
-                ")+"
-    )
+    companion object {
+        private val EMAIL_REGEX = Regex(
+            "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
+                    "\\@" +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                    "(" +
+                    "\\." +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                    ")+"
+        )
+    }
 
-    operator fun invoke(user: User): UseCaseResult {
+    operator fun invoke(user: User): ServiceResult<Boolean> {
 
-     return if (user.email.isBlank() || !user.email.matches(emailAddressRegex))
-            UseCaseResult.Failure(AppErrors.invalidEmail)
+     return if (user.email.isBlank() || !user.email.matches(EMAIL_REGEX))
+         ServiceResult.Error(ErrorCode.INVALID_EMAIL)
         else
-            UseCaseResult.Success
+         ServiceResult.Success(true)
     }
 
 }
