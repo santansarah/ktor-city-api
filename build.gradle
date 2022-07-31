@@ -15,10 +15,6 @@ repositories {
     mavenLocal()
     mavenCentral()
     google()
-   /* mavenLocal()
-    google()
-    mavenCentral()
-    maven { url "https://maven.pkg.jetbrains.space/public/p/ktor/eap" }*/
 }
 
 dependencies {
@@ -35,12 +31,17 @@ dependencies {
     implementation "org.jetbrains.exposed:exposed-dao:$exposedVersion"
     implementation "org.jetbrains.exposed:exposed-jdbc:$exposedVersion"
 
+    //exceptions - status pages
+    implementation "io.ktor:ktor-server-status-pages:$ktor_version"
+
+    //logging
+    implementation "org.slf4j:slf4j-nop:1.7.36"
+
     // database
     implementation "org.jetbrains.exposed:exposed-java-time:$exposedVersion"
     implementation "org.xerial:sqlite-jdbc:3.36.0.3"
 
-    implementation "org.slf4j:slf4j-nop:1.7.36"
-
+    //bcrypt for encryption
     implementation "at.favre.lib:bcrypt:0.9.0"
 
     // Koin for Ktor; make sure you go to File...Project Structure

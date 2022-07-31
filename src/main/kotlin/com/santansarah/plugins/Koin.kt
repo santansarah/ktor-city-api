@@ -16,6 +16,11 @@ fun Application.configureKoin() {
     }
 }
 
+/**
+ * [InsertNewUser] expects a Dao + ValidateUserEmail Use Case.
+ * Here, I tell Koin how to create each...then get magically
+ * injects them into the service.
+ */
 val cityModule = module {
     single<UserDao> { UserDaoImpl() }
     single { ValidateUserEmail() }

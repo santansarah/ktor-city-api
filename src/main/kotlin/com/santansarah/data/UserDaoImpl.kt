@@ -14,7 +14,7 @@ import java.sql.SQLIntegrityConstraintViolationException
 class UserDaoImpl : UserDao {
 
     /**
-     * map our table to a [User] object
+     * Maps my [ResultRow] to a [User] object.
      */
     private fun resultRowToUser(row: ResultRow) = User(
         userId = row[Users.userId],
@@ -36,6 +36,10 @@ class UserDaoImpl : UserDao {
         appCreateDate = row[UserApps.userAppCreateDate]
     )
 
+    /**
+     * Gets a [User] by userId and email. If a user doesn't exist, I
+     * let it throw the exception.
+     */
     override suspend fun getUser(user: User): ServiceResult<User> {
         return try {
             val dbUser = dbQuery {
@@ -58,6 +62,12 @@ class UserDaoImpl : UserDao {
         }
     }
 
+    /**
+     * Inserts a [User]. There is a unique constraint on the email
+     * field, so if it's a dup, it will throw an exception.
+     * I'm able to get the org.sqlite info in the exception;
+     * pretty cool.
+     */
     override suspend fun insertUser(user: User): ServiceResult<User> {
         return try {
             dbQuery {
@@ -73,7 +83,6 @@ class UserDaoImpl : UserDao {
         } catch (e: Exception) {
             when (e) {
                 is ExposedSQLException -> {
-                    println("exception from insert function: ${e.errorCode}")
                     if (e.errorCode == SQLiteErrorCode.SQLITE_CONSTRAINT.code)
                         ServiceResult.Error(ErrorCode.EMAIL_EXISTS)
                     else

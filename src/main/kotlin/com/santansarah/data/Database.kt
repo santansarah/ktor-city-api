@@ -5,6 +5,9 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.*
 import org.jetbrains.exposed.sql.transactions.experimental.*
 
+/**
+ * I'm using SQLite. My [Users] table is created if it doesn't exist.
+ */
 object DatabaseFactory {
     fun init() {
         val driverClassName = "org.sqlite.JDBC"
@@ -17,8 +20,9 @@ object DatabaseFactory {
     }
 
     /**
-     * Make our transactions async
-     * Starts each query in its own coroutine
+     * Exposed transactions are blocking. Here I
+     * start each query in its own coroutine and make
+     * DB calls async on the [Dispatchers.IO] thread.
      */
     suspend fun <T> dbQuery(block: suspend () -> T): T =
         newSuspendedTransaction(Dispatchers.IO) { block() }

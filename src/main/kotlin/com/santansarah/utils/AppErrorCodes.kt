@@ -1,11 +1,11 @@
 package com.santansarah.utils
 
-import kotlinx.serialization.Serializable
-
 /**
- * Types of errors we can get for a Client.
+ * Types of errors that routes could produce. These
+ * codes are returned in the response body.
  */
 enum class ErrorCode(val message: String) {
+    INVALID_USER("Invalid user object. Check your JSON values."),
     INVALID_EMAIL("Invalid email."),
     EMAIL_EXISTS("This email address is already registered."),
     API_KEY("There was a problem generating your API Key. Try again."),
