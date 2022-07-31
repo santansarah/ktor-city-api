@@ -4,6 +4,8 @@
 
 GitHub Source Code: https://github.com/santansarah/ktor-city-api
 
+GitHub Branch: https://github.com/santansarah/ktor-city-api/tree/user-implementation
+
 City info: https://simplemaps.com/data/us-zips
 
 This Ktor REST API allows users to fetch city information by:
@@ -18,6 +20,7 @@ In Part 1, I'll go over:
 * Koin dependency injection
 * Implementing Use Cases
 * Ktor routes
+* Ktor Status Pages (Routing Exceptions)
 
 ## Database Setup
 
