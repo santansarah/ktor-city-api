@@ -1,6 +1,7 @@
 # Ktor City API with Koin, Exposed, and SQLite
 
 ## Video - Part 1
+https://youtu.be/iX4ZIRjmpN4
 
 Links:
 * GitHub Source Code: https://github.com/santansarah/ktor-city-api
