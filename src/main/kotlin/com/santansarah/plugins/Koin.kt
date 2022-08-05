@@ -1,9 +1,10 @@
 package com.santansarah.plugins
 
+import com.santansarah.data.UserAppDao
+import com.santansarah.data.UserAppDaoImpl
 import com.santansarah.data.UserDao
 import com.santansarah.data.UserDaoImpl
-import com.santansarah.domain.usecases.InsertNewUser
-import com.santansarah.domain.usecases.ValidateUserEmail
+import com.santansarah.domain.usecases.*
 import io.ktor.server.application.*
 import org.koin.dsl.module
 import org.koin.ktor.plugin.Koin
@@ -25,4 +26,9 @@ val cityModule = module {
     single<UserDao> { UserDaoImpl() }
     single { ValidateUserEmail() }
     single { InsertNewUser(get(), get()) }
+
+    single<UserAppDao> { UserAppDaoImpl() }
+    single { ValidateUserApp() }
+    single { GenerateApiKey() }
+    single { InsertNewUserApp(get(), get(), get(), get()) }
 }

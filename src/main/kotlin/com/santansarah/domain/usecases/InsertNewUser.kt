@@ -15,7 +15,6 @@ class InsertNewUser
 ) {
 
     suspend operator fun invoke(user: User): UserResponse {
-        var userResponse: UserResponse
 
         return when (val result = validateUserEmail(user)) {
             is ServiceResult.Success -> {

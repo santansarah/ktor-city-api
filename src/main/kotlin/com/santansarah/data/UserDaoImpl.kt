@@ -37,26 +37,28 @@ class UserDaoImpl : UserDao {
     )
 
     /**
-     * Gets a [User] by userId and email. If a user doesn't exist, I
-     * let it throw the exception.
+     * Gets a [User] by userId and email. This is used to verify a
+     * new [UserApp] insert.
      */
-    override suspend fun getUser(user: User): ServiceResult<User> {
+    override suspend fun doesUserExist(userId: Int, email: String): ServiceResult<Boolean> {
         return try {
-            val dbUser = dbQuery {
+            val isEmpty = dbQuery {
                 Users.select {
-                    (Users.userId eq user.userId) and (Users.email eq user.email)
-                }.map(::resultRowToUser)
-                    .single()
+                    (Users.userId eq userId) and (Users.email eq email)
+                }.empty()
             }
 
-            ServiceResult.Success(dbUser)
+            if (isEmpty)
+                ServiceResult.Error(ErrorCode.UNKNOWN_USER)
+            else
+                ServiceResult.Success(true)
+
         } catch (e: Exception) {
             when (e) {
                 is ExposedSQLException -> {
                     println("exception from insert function: ${e.errorCode}")
                     ServiceResult.Error(ErrorCode.DATABASE_ERROR)
                 }
-                is NoSuchElementException -> ServiceResult.Error(ErrorCode.UNKNOWN_USER)
                 else -> ServiceResult.Error(ErrorCode.DATABASE_ERROR)
             }
         }

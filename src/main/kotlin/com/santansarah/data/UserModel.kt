@@ -1,5 +1,6 @@
 package com.santansarah.data
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -35,6 +36,6 @@ data class UserWithApp(
 @Serializable
 enum class AppType(val value: Int) {
     NOTSET(0),
-    DEVELOPMENT(1),
-    PRODUCTION(2)
+    @SerialName("dev") DEVELOPMENT(1),
+    @SerialName("prod") PRODUCTION(2)
 }
