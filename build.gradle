@@ -26,6 +26,9 @@ dependencies {
     testImplementation "io.ktor:ktor-server-tests-jvm:$ktor_version"
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
 
+    // https://github.com/LukasForst/ktor-api-key
+    implementation "dev.forst:ktor-api-key:1.1.0"
+
     // JWT
     implementation("io.ktor:ktor-server-auth:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jwt:$ktor_version")

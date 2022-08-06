@@ -18,3 +18,5 @@ enum class ErrorCode(val message: String) {
     INVALID_JSON("Your JSON must match the format in this sample response."),
     INVALID_CITY_QUERY("You must pass a city name or zip prefix.")
 }
+
+class AuthenticationException : RuntimeException()
