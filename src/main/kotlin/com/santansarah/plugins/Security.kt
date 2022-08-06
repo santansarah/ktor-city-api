@@ -15,31 +15,30 @@ import io.ktor.server.routing.*
 import org.koin.core.component.KoinComponent
 import org.koin.ktor.ext.inject
 
+// principal for the app
+data class AppPrincipal(val userWithApp: UserWithApp) : Principal
+
 fun Application.configureSecurity() {
 
     val userAppDao by inject<UserAppDao>()
 
-    // principal for the app
-    data class AppPrincipal(val userWithApp: UserWithApp) : Principal
-
-	install(Authentication) {
-		// and then api key provider
-		apiKey {
+    install(Authentication) {
+        // and then api key provider
+        apiKey {
             challenge {
                 throw AuthenticationException()
             }
-			// set function that is used to verify request
-			validate { keyFromHeader ->
 
-                when(val userWithApp = userAppDao.getUserWithApp(keyFromHeader)) {
+            /**
+             * get the [UserWithApp] from the api key. if it comes back with
+             * a match, send the AppPrincipal & authenticate.
+             */
+            validate { keyFromHeader ->
+                when (val userWithApp = userAppDao.getUserWithApp(keyFromHeader)) {
                     is ServiceResult.Error -> null
-                    is ServiceResult.Success -> {
-                        keyFromHeader
-                            .takeIf { it == userWithApp.data.apiKey }
-                            ?.let { AppPrincipal(userWithApp.data) }
-                    }
+                    is ServiceResult.Success -> AppPrincipal(userWithApp.data)
                 }
-			}
-		}
-	}
+            }
+        }
+    }
 }

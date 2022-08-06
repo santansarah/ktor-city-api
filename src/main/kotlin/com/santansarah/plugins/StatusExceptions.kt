@@ -4,6 +4,7 @@ import com.santansarah.data.AppType
 import com.santansarah.data.User
 import com.santansarah.data.UserApps
 import com.santansarah.data.UserWithApp
+import com.santansarah.domain.CityResponse
 import com.santansarah.domain.ResponseErrors
 import com.santansarah.domain.UserAppResponse
 import com.santansarah.domain.UserResponse
@@ -33,7 +34,11 @@ fun Application.configureStatusExceptions() {
                     }
                 }
                 is AuthenticationException ->
-                    call.respondText(text = "401: Bad API Key.", status = HttpStatusCode.Unauthorized)
+                    call.respond(
+                        status = HttpStatusCode.Unauthorized,
+                        message = CityResponse(errors =listOf(ResponseErrors(ErrorCode.INVALID_API_KEY,
+                            ErrorCode.INVALID_API_KEY.message)))
+                    )
                 else ->
                     call.respondText(text = "500: $cause", status = HttpStatusCode.InternalServerError)
             }

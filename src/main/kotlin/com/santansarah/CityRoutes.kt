@@ -4,6 +4,7 @@ import com.santansarah.data.CityDaoImpl
 import com.santansarah.data.CityDaoInterface
 import com.santansarah.domain.CityResponse
 import com.santansarah.domain.ResponseErrors
+import com.santansarah.plugins.AppPrincipal
 import com.santansarah.utils.ErrorCode
 import com.santansarah.utils.ServiceResult
 import io.ktor.http.*
@@ -19,6 +20,14 @@ fun Route.cityRouting(
     route("cities") {
         authenticate {
             get {
+
+                // we know we're not null, b/c we're authenticated
+                // at this point. something that would be really
+                // neat here would be to insert this call into
+                // the db to track queries by api key. we could then
+                // get queries per second, etc.
+                val principal = call.principal<AppPrincipal>()!!
+                val userWithApp = principal.userWithApp
 
                 val namePrefix: String? = call.request.queryParameters["name"]
                 val zipPrefix: String? = call.request.queryParameters["zip"]
@@ -40,6 +49,7 @@ fun Route.cityRouting(
                             call.respond(
                                 status = HttpStatusCode.BadRequest,
                                 message = CityResponse(
+                                    userWithApp = userWithApp,
                                     errors = listOf(
                                         ResponseErrors(
                                             dbResult.error,
@@ -52,7 +62,7 @@ fun Route.cityRouting(
                         is ServiceResult.Success -> {
                             call.respond(
                                 status = HttpStatusCode.OK,
-                                message = CityResponse(dbResult.data)
+                                message = CityResponse(userWithApp, dbResult.data)
                             )
                         }
                     }

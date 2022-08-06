@@ -8,6 +8,7 @@ import com.santansarah.utils.ErrorCode
 
 @kotlinx.serialization.Serializable
 data class CityResponse(
+    val userWithApp: UserWithApp = UserWithApp(),
     val cities: List<City> = emptyList(),
     val errors: List<ResponseErrors> = emptyList()
 )
