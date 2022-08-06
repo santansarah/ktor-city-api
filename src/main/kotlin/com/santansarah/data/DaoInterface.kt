@@ -3,7 +3,7 @@ package com.santansarah.data
 import com.santansarah.utils.ServiceResult
 
 /**
- * User DAO Interface.
+ * [User] DAO Interface.
  */
 interface UserDao {
     suspend fun doesUserExist(userId: Int, email: String): ServiceResult<Boolean>
@@ -11,7 +11,7 @@ interface UserDao {
 }
 
 /**
- * TODO: NOT IMPLEMENTED YET.
+ * [UserApp] interface.
  */
 interface UserAppDao {
     suspend fun getUserWithApp(apiKey: String): ServiceResult<UserWithApp>

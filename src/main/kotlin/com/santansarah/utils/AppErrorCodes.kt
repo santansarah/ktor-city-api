@@ -15,5 +15,6 @@ enum class ErrorCode(val message: String) {
     APP_EXISTS("This app already exists."),
     INVALID_APP("UserId, email, app name, and app type can not be blank. Use 'dev' or 'prod' for app type."),
     DATABASE_ERROR("Unknown database error. Try again, and check your parameters."),
-    INVALID_JSON("Your JSON must match the format in this sample response.")
+    INVALID_JSON("Your JSON must match the format in this sample response."),
+    INVALID_CITY_QUERY("You must pass a city name or zip prefix.")
 }

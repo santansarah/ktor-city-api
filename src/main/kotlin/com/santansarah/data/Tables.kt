@@ -35,3 +35,15 @@ object UserApps : Table() {
 
     override val primaryKey = PrimaryKey(userAppId)
 }
+
+/**
+ * City table. This one doesn't need to be created in the factory.
+ */
+object Cities : Table() {
+    val zip = integer("zip")
+    val lat = double("lat")
+    val lng = double("lng")
+    val city = varchar("city", 255)
+    val state = varchar("state_id", 255)
+    val population = integer("population")
+}

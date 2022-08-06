@@ -1,5 +1,8 @@
 package com.santansarah.plugins
 
+import com.santansarah.cityRouting
+import com.santansarah.data.CityDaoImpl
+import com.santansarah.data.CityDaoInterface
 import com.santansarah.domain.usecases.InsertNewUser
 import com.santansarah.domain.usecases.InsertNewUserApp
 import com.santansarah.newAccount
@@ -16,7 +19,7 @@ fun Application.configureRouting() {
             call.respondText("Hello World!")
         }
 
-        // Lazy inject HelloService from within a Ktor Routing Node
+        // Lazy inject from within a Ktor Routing Node
         val insertService by inject<InsertNewUser>()
 
         /**
@@ -29,5 +32,11 @@ fun Application.configureRouting() {
          */
         val insertAppService by inject<InsertNewUserApp>()
          newApp(insertAppService)
+
+        /**
+         * City Routes
+         */
+        val cityDao by inject<CityDaoInterface>()
+        cityRouting(cityDao)
     }
 }
