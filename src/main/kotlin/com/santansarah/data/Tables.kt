@@ -25,7 +25,7 @@ object Users : Table() {
 object UserApps : Table() {
     val userAppId = integer("userAppId").autoIncrement()
     val userId = integer("userId")
-        .index()
+        .index(isUnique = false)
         .references(Users.userId) // Users is parent.
     val appName = varchar("appName", 255)
     val appType = enumeration<AppType>("appType")
