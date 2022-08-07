@@ -51,6 +51,7 @@ curl --location --request POST 'http://127.0.0.1:8080/users/create' \
 ```
 
 ## Video - Part 2
+https://youtu.be/Ricf7e5cScg
 
 Links:
 * GitHub Source Code: https://github.com/santansarah/ktor-city-api
