@@ -16,6 +16,7 @@ object DatabaseFactory {
 
         transaction {
             SchemaUtils.create(Users, UserApps)
+            SchemaUtils.createMissingTablesAndColumns(Users)
         }
     }
 

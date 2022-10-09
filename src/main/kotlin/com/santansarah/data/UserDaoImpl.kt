@@ -8,6 +8,7 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
+import org.koin.core.qualifier.named
 import org.sqlite.SQLiteErrorCode
 import java.sql.SQLIntegrityConstraintViolationException
 
@@ -19,6 +20,7 @@ class UserDaoImpl : UserDao {
     private fun resultRowToUser(row: ResultRow) = User(
         userId = row[Users.userId],
         email = row[Users.email],
+        name = row[Users.name],
         userCreateDate = row[Users.userCreateDate],
     )
 
@@ -76,6 +78,7 @@ class UserDaoImpl : UserDao {
                 Users
                     .insert {
                         it[email] = user.email
+                        it[name] = user.name
                         it[userCreateDate] = user.userCreateDate
                     }
                     .resultedValues?.singleOrNull()?.let {

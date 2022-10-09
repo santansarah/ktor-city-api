@@ -17,7 +17,11 @@ enum class ErrorCode(val message: String) {
     DATABASE_ERROR("Unknown database error. Try again, and check your parameters."),
     INVALID_JSON("Your JSON must match the format in this sample response."),
     INVALID_CITY_QUERY("You must pass a city name or zip prefix."),
-    INVALID_API_KEY("Bad API key. Use x-api-key in the header.")
+    INVALID_API_KEY("Bad API key. Use x-api-key in the header."),
+    INVALID_GOOGLE_CREDENTIALS("Invalid Google sign in."),
+    TOKEN_EXPIRED("JWT Token expired.")
 }
 
 class AuthenticationException : RuntimeException()
+//class GoogleException(val realm: String) : RuntimeException()
+class GoogleException() : RuntimeException()

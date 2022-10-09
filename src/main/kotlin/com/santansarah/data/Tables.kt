@@ -12,6 +12,7 @@ object Users : Table() {
     val userId = integer("userId").autoIncrement()
     val email = varchar("email", 255)
         .uniqueIndex()
+    val name = varchar("name", 255).default("")
     val userCreateDate = varchar("userCreateDate", length = 255)
 
     override val primaryKey = PrimaryKey(userId)

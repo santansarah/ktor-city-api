@@ -19,13 +19,13 @@ fun Application.configureJWT() {
         .rateLimited(10, 1, TimeUnit.MINUTES)
         .build()
     install(Authentication) {
-        jwt("auth-jwt") {
+        jwt("google") {
             realm = myRealm
             verifier(jwkProvider, issuer) {
                 acceptLeeway(3)
             }
             validate { credential ->
-                if (credential.payload.getClaim("username").asString() != "") {
+                if (credential.payload.getClaim("email").asString() != "") {
                     JWTPrincipal(credential.payload)
                 } else {
                     null

@@ -1,5 +1,6 @@
 package com.santansarah.plugins
 
+import com.auth0.jwt.exceptions.TokenExpiredException
 import com.santansarah.data.AppType
 import com.santansarah.data.User
 import com.santansarah.data.UserApps
@@ -11,7 +12,9 @@ import com.santansarah.domain.UserResponse
 import com.santansarah.utils.AppRoutes
 import com.santansarah.utils.AuthenticationException
 import com.santansarah.utils.ErrorCode
+import com.santansarah.utils.GoogleException
 import io.ktor.http.*
+import io.ktor.http.cio.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.request.*
@@ -39,6 +42,21 @@ fun Application.configureStatusExceptions() {
                         message = CityResponse(errors =listOf(ResponseErrors(ErrorCode.INVALID_API_KEY,
                             ErrorCode.INVALID_API_KEY.message)))
                     )
+                is GoogleException -> {
+                    //call.response.headers.append(HttpHeaders.WWWAuthenticate, cause.realm)
+                    call.respond(
+                        status = HttpStatusCode.Unauthorized,
+                        message = UserResponse(
+                            User(email = "sample@email.com"),
+                            errors = listOf(
+                                ResponseErrors(
+                                    ErrorCode.INVALID_GOOGLE_CREDENTIALS,
+                                    ErrorCode.INVALID_GOOGLE_CREDENTIALS.message
+                                )
+                            )
+                        )
+                    )
+                }
                 else ->
                     call.respondText(text = "500: $cause", status = HttpStatusCode.InternalServerError)
             }
