@@ -1,8 +1,7 @@
-package com.santansarah.domain
+package com.santansarah.domain.models
 
-import com.santansarah.data.User
-import com.santansarah.data.UserApp
-import com.santansarah.data.UserWithApp
+import com.santansarah.data.models.User
+import com.santansarah.data.models.UserWithApp
 import com.santansarah.utils.ErrorCode
 
 @kotlinx.serialization.Serializable

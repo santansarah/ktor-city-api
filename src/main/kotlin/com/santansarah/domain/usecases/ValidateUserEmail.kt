@@ -1,6 +1,6 @@
 package com.santansarah.domain.usecases
 
-import com.santansarah.data.User
+import com.santansarah.data.models.User
 import com.santansarah.utils.ErrorCode
 import com.santansarah.utils.ServiceResult
 

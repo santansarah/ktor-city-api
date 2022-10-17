@@ -1,9 +1,6 @@
-package com.santansarah
+package com.santansarah.routes
 
-import com.santansarah.data.User
-import com.santansarah.data.UserApp
-import com.santansarah.data.UserWithApp
-import com.santansarah.domain.usecases.InsertNewUser
+import com.santansarah.data.models.UserWithApp
 import com.santansarah.domain.usecases.InsertNewUserApp
 import io.ktor.http.*
 import io.ktor.server.application.*

@@ -1,14 +1,10 @@
 package com.santansarah.plugins
 
 import com.auth0.jwk.JwkProviderBuilder
-import com.santansarah.data.User
-import com.santansarah.data.toUser
 import com.santansarah.utils.GoogleException
-import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.config.*
-import io.ktor.server.request.*
 import java.net.URL
 import java.util.concurrent.TimeUnit
 
@@ -54,14 +50,6 @@ fun AuthenticationConfig.configureGoogleJWT(config: ApplicationConfig) {
 
             if (nonceFromHeader != nonceFromJWT)
                return@validate null
-
-            // finally, make sure the request user data matches the JWT
-            val userFromRequest = this.request.call.receiveNullable<User>()
-            val userFromJWT = credentials.payload.toUser()
-            println("users from validate: $userFromRequest ; $userFromJWT")
-
-            if (userFromRequest != userFromJWT)
-                return@validate null
 
             // if we've made it here, we're all good
             JWTPrincipal(credentials.payload)

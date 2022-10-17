@@ -2,11 +2,8 @@ package com.santansarah
 
 import io.ktor.server.application.*
 import com.santansarah.data.DatabaseFactory
-import com.santansarah.data.UserAppDao
 import com.santansarah.plugins.*
-import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import org.koin.ktor.ext.inject
 
 fun main(args: Array<String>): Unit = EngineMain.main(args)
 

@@ -1,12 +1,15 @@
-package com.santansarah.data
+package com.santansarah.data.dao
 
+import com.santansarah.data.Cities
+import com.santansarah.data.City
+import com.santansarah.domain.interfaces.ICityDao
 import com.santansarah.data.DatabaseFactory.dbQuery
 import com.santansarah.utils.ErrorCode
 import com.santansarah.utils.ServiceResult
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.*
 
-class CityDaoImpl : CityDaoInterface {
+class CityDaoImpl : ICityDao {
 
     /**
      * Maps my [ResultRow] to a [City] object.

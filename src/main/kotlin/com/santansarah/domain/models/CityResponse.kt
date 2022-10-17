@@ -1,10 +1,7 @@
-package com.santansarah.domain
+package com.santansarah.domain.models
 
 import com.santansarah.data.City
-import com.santansarah.data.User
-import com.santansarah.data.UserApp
-import com.santansarah.data.UserWithApp
-import com.santansarah.utils.ErrorCode
+import com.santansarah.data.models.UserWithApp
 
 @kotlinx.serialization.Serializable
 data class CityResponse(

@@ -1,4 +1,4 @@
-package com.santansarah.data
+package com.santansarah.data.models
 
 import com.auth0.jwt.interfaces.Payload
 import kotlinx.serialization.SerialName

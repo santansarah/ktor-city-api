@@ -1,13 +1,17 @@
-package com.santansarah.data
+package com.santansarah.data.dao
 
+import com.santansarah.data.*
 import com.santansarah.data.DatabaseFactory.dbQuery
+import com.santansarah.data.models.UserApp
+import com.santansarah.data.models.UserWithApp
+import com.santansarah.domain.interfaces.IUserAppDao
 import com.santansarah.utils.ErrorCode
 import com.santansarah.utils.ServiceResult
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.*
 import org.sqlite.SQLiteErrorCode
 
-class UserAppDaoImpl : UserAppDao {
+class UserAppDaoImpl : IUserAppDao {
 
     /**
      * Map my table join query to a [UserWithApp] object

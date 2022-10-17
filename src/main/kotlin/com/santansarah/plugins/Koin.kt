@@ -1,6 +1,11 @@
 package com.santansarah.plugins
 
-import com.santansarah.data.*
+import com.santansarah.data.dao.CityDaoImpl
+import com.santansarah.data.dao.UserAppDaoImpl
+import com.santansarah.data.dao.UserDaoImpl
+import com.santansarah.domain.interfaces.ICityDao
+import com.santansarah.domain.interfaces.IUserAppDao
+import com.santansarah.domain.interfaces.IUserDao
 import com.santansarah.domain.usecases.*
 import io.ktor.server.application.*
 import org.koin.dsl.module
@@ -20,14 +25,15 @@ fun Application.configureKoin() {
  * injects them into the service.
  */
 val cityModule = module {
-    single<UserDao> { UserDaoImpl() }
+    single<IUserDao> { UserDaoImpl() }
     single { ValidateUserEmail() }
     single { InsertNewUser(get(), get()) }
+    single { GetUser(get()) }
 
-    single<UserAppDao> { UserAppDaoImpl() }
+    single<IUserAppDao> { UserAppDaoImpl() }
     single { ValidateUserApp() }
     single { GenerateApiKey() }
     single { InsertNewUserApp(get(), get(), get(), get()) }
 
-    single<CityDaoInterface> { CityDaoImpl() }
+    single<ICityDao> { CityDaoImpl() }
 }

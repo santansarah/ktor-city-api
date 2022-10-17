@@ -1,24 +1,22 @@
-package com.santansarah
+package com.santansarah.routes
 
-import com.santansarah.data.CityDaoImpl
-import com.santansarah.data.CityDaoInterface
-import com.santansarah.domain.CityResponse
-import com.santansarah.domain.ResponseErrors
+import com.santansarah.domain.interfaces.ICityDao
+import com.santansarah.domain.models.CityResponse
+import com.santansarah.domain.models.ResponseErrors
 import com.santansarah.plugins.AppPrincipal
 import com.santansarah.utils.ErrorCode
 import com.santansarah.utils.ServiceResult
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.engine.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Route.cityRouting(
-    cityDaoImpl: CityDaoInterface
+    cityDaoImpl: ICityDao
 ) {
     route("cities") {
-        authenticate {
+        authenticate("city") {
             get {
 
                 // we know we're not null, b/c we're authenticated

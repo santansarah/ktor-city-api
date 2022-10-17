@@ -1,8 +1,7 @@
 package com.santansarah.domain.usecases
 
-import com.santansarah.data.AppType
-import com.santansarah.data.UserApp
-import com.santansarah.data.UserWithApp
+import com.santansarah.data.models.AppType
+import com.santansarah.data.models.UserWithApp
 import com.santansarah.utils.ErrorCode
 import com.santansarah.utils.ServiceResult
 

@@ -1,20 +1,17 @@
 package com.santansarah.plugins
 
-import com.auth0.jwt.exceptions.TokenExpiredException
-import com.santansarah.data.AppType
-import com.santansarah.data.User
-import com.santansarah.data.UserApps
-import com.santansarah.data.UserWithApp
-import com.santansarah.domain.CityResponse
-import com.santansarah.domain.ResponseErrors
-import com.santansarah.domain.UserAppResponse
-import com.santansarah.domain.UserResponse
+import com.santansarah.data.models.AppType
+import com.santansarah.data.models.User
+import com.santansarah.data.models.UserWithApp
+import com.santansarah.domain.models.CityResponse
+import com.santansarah.domain.models.ResponseErrors
+import com.santansarah.domain.models.UserAppResponse
+import com.santansarah.domain.models.UserResponse
 import com.santansarah.utils.AppRoutes
 import com.santansarah.utils.AuthenticationException
 import com.santansarah.utils.ErrorCode
 import com.santansarah.utils.GoogleException
 import io.ktor.http.*
-import io.ktor.http.cio.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.request.*
@@ -39,8 +36,10 @@ fun Application.configureStatusExceptions() {
                 is AuthenticationException ->
                     call.respond(
                         status = HttpStatusCode.Unauthorized,
-                        message = CityResponse(errors =listOf(ResponseErrors(ErrorCode.INVALID_API_KEY,
-                            ErrorCode.INVALID_API_KEY.message)))
+                        message = CityResponse(errors =listOf(
+                            ResponseErrors(ErrorCode.INVALID_API_KEY,
+                            ErrorCode.INVALID_API_KEY.message)
+                        ))
                     )
                 is GoogleException -> {
                     //call.response.headers.append(HttpHeaders.WWWAuthenticate, cause.realm)

@@ -1,18 +1,18 @@
-package com.santansarah.data
+package com.santansarah.data.dao
 
+import com.santansarah.data.*
 import com.santansarah.data.DatabaseFactory.dbQuery
+import com.santansarah.data.models.User
+import com.santansarah.data.models.UserWithApp
+import com.santansarah.domain.interfaces.IUserDao
 import com.santansarah.utils.ErrorCode
 import com.santansarah.utils.ServiceResult
 import org.jetbrains.exposed.exceptions.ExposedSQLException
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
-import org.koin.core.qualifier.named
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.sqlite.SQLiteErrorCode
-import java.sql.SQLIntegrityConstraintViolationException
 
-class UserDaoImpl : UserDao {
+class UserDaoImpl : IUserDao {
 
     /**
      * Maps my [ResultRow] to a [User] object.
@@ -37,6 +37,40 @@ class UserDaoImpl : UserDao {
         apiKey = row[UserApps.apiKey],
         appCreateDate = row[UserApps.userAppCreateDate]
     )
+
+    /**
+     * Gets a [User] by userId or email.
+     */
+    override suspend fun getUserByEmail(email: String): ServiceResult<User> {
+        return getUser((Users.email eq email))
+    }
+    override suspend fun getUserById(id: Int): ServiceResult<User> {
+        return getUser((Users.userId eq id))
+    }
+
+    private suspend fun getUser(sql: Op<Boolean>): ServiceResult<User> {
+        return try {
+            val dbUser = dbQuery {
+                Users.select {
+                    sql
+                }.map(::resultRowToUser)
+                    .single()
+            }
+            ServiceResult.Success(dbUser)
+        } catch (e: Exception) {
+            when (e) {
+                is NoSuchElementException -> {
+                    ServiceResult.Error(ErrorCode.UNKNOWN_USER)
+                }
+                is ExposedSQLException -> {
+                    println("exception from insert function: ${e.errorCode}")
+                    ServiceResult.Error(ErrorCode.DATABASE_ERROR)
+                }
+                else -> ServiceResult.Error(ErrorCode.DATABASE_ERROR)
+            }
+        }
+    }
+
 
     /**
      * Gets a [User] by userId and email. This is used to verify a

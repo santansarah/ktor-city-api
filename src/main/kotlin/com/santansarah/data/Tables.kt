@@ -1,5 +1,6 @@
 package com.santansarah.data
 
+import com.santansarah.data.models.AppType
 import org.jetbrains.exposed.sql.Table
 
 

@@ -1,18 +1,15 @@
 package com.santansarah.plugins
 
-import com.santansarah.data.UserAppDao
-import com.santansarah.data.UserWithApp
+import com.santansarah.domain.interfaces.IUserAppDao
+import com.santansarah.data.models.UserWithApp
 import com.santansarah.utils.AuthenticationException
 import com.santansarah.utils.ServiceResult
 import dev.forst.ktor.apikey.apiKey
 import io.ktor.server.auth.*
-import io.ktor.server.config.*
-import org.koin.java.KoinJavaComponent.inject
-import org.koin.ktor.ext.inject
 
-fun AuthenticationConfig.configureApiKey(userAppDao: UserAppDao) {
+fun AuthenticationConfig.configureApiKey(IUserAppDao: IUserAppDao) {
 
-    apiKey {
+    apiKey("city") {
         challenge {
             throw AuthenticationException()
         }
@@ -22,7 +19,7 @@ fun AuthenticationConfig.configureApiKey(userAppDao: UserAppDao) {
          * a match, send the AppPrincipal & authenticate.
          */
         validate { keyFromHeader ->
-            when (val userWithApp = userAppDao.getUserWithApp(keyFromHeader)) {
+            when (val userWithApp = IUserAppDao.getUserWithApp(keyFromHeader)) {
                 is ServiceResult.Error -> null
                 is ServiceResult.Success -> AppPrincipal(userWithApp.data)
             }

@@ -1,12 +1,12 @@
 package com.santansarah.plugins
 
-import com.santansarah.cityRouting
-import com.santansarah.data.CityDaoImpl
-import com.santansarah.data.CityDaoInterface
+import com.santansarah.routes.cityRouting
+import com.santansarah.domain.interfaces.ICityDao
+import com.santansarah.domain.usecases.GetUser
 import com.santansarah.domain.usecases.InsertNewUser
 import com.santansarah.domain.usecases.InsertNewUserApp
-import com.santansarah.newAccount
-import com.santansarah.newApp
+import com.santansarah.routes.users
+import com.santansarah.routes.newApp
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -21,11 +21,12 @@ fun Application.configureRouting() {
 
         // Lazy inject from within a Ktor Routing Node
         val insertService by inject<InsertNewUser>()
+        val getUser by inject<GetUser>()
 
         /**
          * User routes.
          */
-        newAccount(insertService)
+        users(insertService, getUser)
 
         /**
          * UserApp Routes
@@ -36,7 +37,7 @@ fun Application.configureRouting() {
         /**
          * City Routes
          */
-        val cityDao by inject<CityDaoInterface>()
+        val cityDao by inject<ICityDao>()
         cityRouting(cityDao)
     }
 }
