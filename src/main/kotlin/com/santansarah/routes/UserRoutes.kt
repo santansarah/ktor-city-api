@@ -59,7 +59,7 @@ fun Route.users(
                  */
                 val userResponse = getUser(Email(request.email))
                 var httpStatus =
-                    if (userResponse.errors.isEmpty()) HttpStatusCode.Found else HttpStatusCode.BadRequest
+                    if (userResponse.errors.isEmpty()) HttpStatusCode.OK else HttpStatusCode.BadRequest
 
                 call.respond(
                     status = httpStatus,
