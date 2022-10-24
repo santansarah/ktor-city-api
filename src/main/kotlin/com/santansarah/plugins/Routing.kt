@@ -3,7 +3,7 @@ package com.santansarah.plugins
 import com.santansarah.routes.cityRouting
 import com.santansarah.domain.interfaces.ICityDao
 import com.santansarah.domain.usecases.GetUser
-import com.santansarah.domain.usecases.InsertNewUser
+import com.santansarah.domain.usecases.GetOrInsertUser
 import com.santansarah.domain.usecases.InsertNewUserApp
 import com.santansarah.routes.users
 import com.santansarah.routes.newApp
@@ -20,7 +20,7 @@ fun Application.configureRouting() {
         }
 
         // Lazy inject from within a Ktor Routing Node
-        val insertService by inject<InsertNewUser>()
+        val insertService by inject<GetOrInsertUser>()
         val getUser by inject<GetUser>()
 
         /**

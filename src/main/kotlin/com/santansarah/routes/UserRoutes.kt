@@ -3,22 +3,19 @@ package com.santansarah.routes
 import com.santansarah.data.models.User
 import com.santansarah.data.models.toUser
 import com.santansarah.domain.usecases.*
-import com.santansarah.plugins.AppPrincipal
-import com.santansarah.plugins.AuthPrincipal
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
-import io.ktor.util.pipeline.*
 
 fun Route.users(
-    insertNewUser: InsertNewUser,
+    getOrInsertUser: GetOrInsertUser,
     getUser: GetUser
 ) {
 
-    route("users/create") {
+    route("users/authenticate") {
         authenticate("google") {
             get {
 
@@ -31,9 +28,9 @@ fun Route.users(
                 /**
                  * Validate the [User] object and insert if everything's good.
                  */
-                val userResponse = insertNewUser(request)
+                val userResponse = getOrInsertUser(request)
                 var httpStatus =
-                    if (userResponse.errors.isEmpty()) HttpStatusCode.Created else HttpStatusCode.BadRequest
+                    if (userResponse.errors.isEmpty()) HttpStatusCode.OK else HttpStatusCode.BadRequest
 
                 call.respond(
                     status = httpStatus,

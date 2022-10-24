@@ -14,8 +14,8 @@ class InsertNewUserApp
     (
     private val validateUserApp: ValidateUserApp,
     private val generateApiKey: GenerateApiKey,
-    private val IUserAppDao: IUserAppDao,
-    private val IUserDao: IUserDao
+    private val userAppDao: IUserAppDao,
+    private val userDao: IUserDao
 ) {
 
     suspend operator fun invoke(userWithApp: UserWithApp): UserAppResponse {
@@ -27,19 +27,19 @@ class InsertNewUserApp
         }
 
         // make sure the user exists
-        val checkUser = IUserDao.doesUserExist(userWithApp.userId, userWithApp.email)
+        val checkUser = userDao.doesUserExist(userWithApp.userId, userWithApp.email)
         if (checkUser is ServiceResult.Error)
             return userResponseError(userWithApp, checkUser.error)
 
         // make sure this app + app type is unique
-        val checkAppAndType = IUserAppDao.checkForDupApp(userWithApp)
+        val checkAppAndType = userAppDao.checkForDupApp(userWithApp)
         if (checkAppAndType is ServiceResult.Error) {
             return userResponseError(userWithApp, checkAppAndType.error)
         }
 
         // generate the api key and insert the new app
         val apiKey = generateApiKey()
-        val dbResult = IUserAppDao.insertUserApp(userWithApp.copy(
+        val dbResult = userAppDao.insertUserApp(userWithApp.copy(
             apiKey = apiKey,
             appCreateDate = LocalDateTime.now().toDatabaseString())
         )
@@ -48,7 +48,7 @@ class InsertNewUserApp
             return userResponseError(userWithApp, dbResult.error)
 
         // if the app was inserted, return the app w/the user info
-        return when (val newApp = IUserAppDao.getUserWithApp(apiKey)) {
+        return when (val newApp = userAppDao.getUserWithApp(apiKey)) {
                 is ServiceResult.Error -> userResponseError(userWithApp, newApp.error)
                 is ServiceResult.Success -> UserAppResponse(newApp.data)
         }

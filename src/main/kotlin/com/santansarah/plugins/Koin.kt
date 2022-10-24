@@ -20,14 +20,14 @@ fun Application.configureKoin() {
 }
 
 /**
- * [InsertNewUser] expects a Dao + ValidateUserEmail Use Case.
+ * [GetOrInsertUser] expects a Dao + ValidateUserEmail Use Case.
  * Here, I tell Koin how to create each...then get magically
  * injects them into the service.
  */
 val cityModule = module {
     single<IUserDao> { UserDaoImpl() }
     single { ValidateUserEmail() }
-    single { InsertNewUser(get(), get()) }
+    single { GetOrInsertUser(get()) }
     single { GetUser(get()) }
 
     single<IUserAppDao> { UserAppDaoImpl() }
