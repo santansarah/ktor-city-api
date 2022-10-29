@@ -8,12 +8,13 @@ import io.ktor.server.config.*
 import java.net.URL
 import java.util.concurrent.TimeUnit
 
+/**
+ * Here's the guide from Google:
+ * https://developers.google.com/identity/one-tap/android/idtoken-auth
+ * - use these values in resources/application.conf
+ * - save your secrets in environment variables
+ */
 fun AuthenticationConfig.configureGoogleJWT(config: ApplicationConfig) {
-
-    // here's the guide from Google:
-    // https://developers.google.com/identity/one-tap/android/idtoken-auth
-    // use these values in resources/application.conf
-    // save your secrets in environment variables
 
     // not using realm for now.
     val jwtIssuer = config.property("jwt.google.issuer").getString()

@@ -8,6 +8,11 @@ import com.santansarah.utils.ServiceResult
 import com.santansarah.utils.toDatabaseString
 import java.time.LocalDateTime
 
+/**
+ * Returns an existing [User] by email if they exist.
+ * Otherwise, inserts the new [User] with info that we
+ * got from the Google JWT.
+ */
 class GetOrInsertUser
     (
     private val userDao: IUserDao

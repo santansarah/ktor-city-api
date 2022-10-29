@@ -15,7 +15,7 @@ import org.sqlite.SQLiteErrorCode
 class UserDaoImpl : IUserDao {
 
     /**
-     * Maps my [ResultRow] to a [User] object.
+     * Maps a [ResultRow] to a [User] object.
      */
     private fun resultRowToUser(row: ResultRow) = User(
         userId = row[Users.userId],
@@ -25,7 +25,7 @@ class UserDaoImpl : IUserDao {
     )
 
     /**
-     * map our table join to a [UserWithApp] object
+     * Maps a [UserWithApp] object.
      */
     private fun resultRowToUserWithApp(row: ResultRow) = UserWithApp(
         userId = row[Users.userId],
@@ -39,15 +39,23 @@ class UserDaoImpl : IUserDao {
     )
 
     /**
-     * Gets a [User] by userId or email.
+     * Gets a [User] by the email we get from JWT.
      */
     override suspend fun getUserByEmail(email: String): ServiceResult<User> {
         return getUser((Users.email eq email))
     }
+
+    /**
+     * Gets a [User] by the id that's stored in our Android app
+     * UserPreferences Datastore.
+     */
     override suspend fun getUserById(id: Int): ServiceResult<User> {
         return getUser((Users.userId eq id))
     }
 
+    /**
+     * Helper function that takes a sql query ([User] by email or id).
+     */
     private suspend fun getUser(sql: Op<Boolean>): ServiceResult<User> {
         return try {
             val dbUser = dbQuery {

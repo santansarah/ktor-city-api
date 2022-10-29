@@ -7,6 +7,8 @@ import org.jetbrains.exposed.sql.transactions.experimental.*
 
 /**
  * I'm using SQLite. My [Users] table is created if it doesn't exist.
+ * Because I modified my [Users] table in this branch, I used
+ * [SchemaUtils.createMissingTablesAndColumns].
  */
 object DatabaseFactory {
     fun init() {

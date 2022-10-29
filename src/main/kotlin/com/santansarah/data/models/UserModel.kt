@@ -4,6 +4,10 @@ import com.auth0.jwt.interfaces.Payload
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * Holds basic user info that we get from Google
+ * JWT.
+ */
 @Serializable
 data class User(
     val userId: Int = 0,
@@ -14,7 +18,8 @@ data class User(
 )
 
 /**
- * Maps a [Payload] to a [User].
+ * Extension function that maps a
+ * Google JWT [Payload] to a [User].
  */
 fun Payload.toUser() =
     try {

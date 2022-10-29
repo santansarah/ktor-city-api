@@ -7,7 +7,8 @@ import org.jetbrains.exposed.sql.Table
 /**
  * Create a [User] table, and add a unique constraint
  * to email. The userId is [autoIncrement] - I'll get
- * the whole record back from my DAO on insert.
+ * the whole record back from my DAO on insert. We get
+ * basic user info from the Google JWT.
  */
 object Users : Table() {
     val userId = integer("userId").autoIncrement()

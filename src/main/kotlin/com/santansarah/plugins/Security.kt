@@ -13,12 +13,12 @@ data class AuthPrincipal(val isValid: Boolean) : Principal
 fun Application.configureSecurity() {
 
     // inject this at the Application level
-    val IUserAppDao by inject<IUserAppDao>()
+    val userAppDao by inject<IUserAppDao>()
 
     // separate these Auth modules to keep this file clean.
     install(Authentication) {
         // and then api key provider
-        configureApiKey(IUserAppDao)
+        configureApiKey(userAppDao)
         configureGoogleJWT(this@configureSecurity.environment.config)
         configureAppAuthority(this@configureSecurity.environment.config)
     }

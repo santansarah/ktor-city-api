@@ -10,6 +10,10 @@ import io.ktor.server.routing.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 
+/**
+ * Gets or inserts a new [User] from Google JWT basic
+ * account info.
+ */
 fun Route.users(
     getOrInsertUser: GetOrInsertUser,
     getUser: GetUser
@@ -42,32 +46,11 @@ fun Route.users(
         }
     }
 
-    route("users/get") {
-        authenticate("google") {
-            get {
-
-                val principal = call.principal<JWTPrincipal>()
-                val expiresAt = principal!!.expiresAt?.time?.minus(System.currentTimeMillis())
-                println("expires: $expiresAt")
-
-                val request = principal.payload.toUser()
-                /**
-                 * Get the [User] from the email address in the payload.
-                 */
-                val userResponse = getUser(Email(request.email))
-                var httpStatus =
-                    if (userResponse.errors.isEmpty()) HttpStatusCode.OK else HttpStatusCode.BadRequest
-
-                call.respond(
-                    status = httpStatus,
-                    message = userResponse
-                )
-
-            }
-
-        }
-    }
-
+    /**
+     * Get a [User] by the userId that's stored in
+     * UserPreferences, client side. Must be authenticated
+     * with the API key that's authorized in the API config.
+     */
     route("users/{id}") {
         authenticate("app") {
             get {

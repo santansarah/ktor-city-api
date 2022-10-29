@@ -7,19 +7,19 @@ import com.santansarah.utils.ServiceResult
 import dev.forst.ktor.apikey.apiKey
 import io.ktor.server.auth.*
 
-fun AuthenticationConfig.configureApiKey(IUserAppDao: IUserAppDao) {
+/**
+ * Get the [UserWithApp] from an API key. If it comes back with
+ * a match, send the AppPrincipal & authenticate.
+ */
+fun AuthenticationConfig.configureApiKey(userAppDao: IUserAppDao) {
 
     apiKey("city") {
         challenge {
             throw AuthenticationException()
         }
 
-        /**
-         * get the [UserWithApp] from the api key. if it comes back with
-         * a match, send the AppPrincipal & authenticate.
-         */
         validate { keyFromHeader ->
-            when (val userWithApp = IUserAppDao.getUserWithApp(keyFromHeader)) {
+            when (val userWithApp = userAppDao.getUserWithApp(keyFromHeader)) {
                 is ServiceResult.Error -> null
                 is ServiceResult.Success -> AppPrincipal(userWithApp.data)
             }

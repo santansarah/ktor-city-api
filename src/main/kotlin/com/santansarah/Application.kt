@@ -7,11 +7,12 @@ import io.ktor.server.netty.*
 
 fun main(args: Array<String>): Unit = EngineMain.main(args)
 
-// Important: When you load from application.conf, don't use
-// embeddedServer(). Instead, your fun main above will
-// handle the port and host. Otherwise, your Application
-// extension methods won't have the environment!
-
+/**
+ * Important: When you load from application.conf, don't use
+ * embeddedServer(). Instead, your fun main above will
+ * handle the port and host. Otherwise, your Application
+ * extension methods won't have the environment!
+*/
 fun Application.module() {
 
         DatabaseFactory.init()
