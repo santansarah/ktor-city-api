@@ -22,7 +22,7 @@ a Nonce claim.
 
 Links:
 
-* GitHub Source Code: https://github.com/santansarah/ktor-city-api/tree/google-one-tap
+* Android app: https://github.com/santansarah/city-api-client/tree/ktor-network-api
 * Ktor JWT: https://ktor.io/docs/jwt.html
 * Google One Tap: https://developers.google.com/identity/one-tap/android/idtoken-auth
 
