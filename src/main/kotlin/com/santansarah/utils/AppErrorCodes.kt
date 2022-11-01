@@ -1,8 +1,9 @@
 package com.santansarah.utils
 
 /**
- * Types of errors that routes could produce. These
- * codes are returned in the response body.
+ * Here's a list of my app error codes, which include the types of errors
+ * that routes can produce. In my Android app, I can easily show these errors
+ * in a snackbar.
  */
 enum class ErrorCode(val message: String) {
     INVALID_USER("Invalid user object. Check your JSON values."),
@@ -18,8 +19,7 @@ enum class ErrorCode(val message: String) {
     INVALID_JSON("Your JSON must match the format in this sample response."),
     INVALID_CITY_QUERY("You must pass a city name or zip prefix."),
     INVALID_API_KEY("Bad API key. Use x-api-key in the header."),
-    INVALID_GOOGLE_CREDENTIALS("Invalid Google sign in."),
-    TOKEN_EXPIRED("JWT Token expired.")
+    INVALID_GOOGLE_CREDENTIALS("Invalid Google sign in.")
 }
 
 class AuthenticationException : RuntimeException()

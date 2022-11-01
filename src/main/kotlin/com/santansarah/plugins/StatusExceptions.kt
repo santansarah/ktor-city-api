@@ -13,11 +13,16 @@ import com.santansarah.utils.ErrorCode
 import com.santansarah.utils.GoogleException
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import kotlinx.serialization.SerializationException
 
+/**
+ * I use the [StatusPages] plugin to provide consistent
+ * error handling for all of my routes.
+ */
 fun Application.configureStatusExceptions() {
 
     install(StatusPages) {
@@ -41,12 +46,18 @@ fun Application.configureStatusExceptions() {
                             ErrorCode.INVALID_API_KEY.message)
                         ))
                     )
+                /**
+                 * If JWT validation fails and a GoogleException is thrown,
+                 * the API returns an Unauthorized status code, along with the
+                 * INVALID_GOOGLE_CREDENTIALS [ErrorCode] in the [ResponseErrors]
+                 * data class.
+                 */
                 is GoogleException -> {
                     //call.response.headers.append(HttpHeaders.WWWAuthenticate, cause.realm)
                     call.respond(
                         status = HttpStatusCode.Unauthorized,
                         message = UserResponse(
-                            User(email = "sample@email.com"),
+                            User(),
                             errors = listOf(
                                 ResponseErrors(
                                     ErrorCode.INVALID_GOOGLE_CREDENTIALS,

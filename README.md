@@ -1,8 +1,16 @@
 # Google One Tap Validation with Ktor
 
-## Video - Part 3
+## YouTube Videos
 
-TBD
+[Google One Tap with Jetpack Compose and Ktor - Playlist](https://www.youtube.com/playlist?list=PLzxawGXQRFswx9iqiCCnrDtYJw1zwGLkd)
+
+[Google One tap for Android with Ktor JWT Validation: Overview and Cloud Setup](https://youtu.be/WsnNiQje1o8)
+
+[Validate Google One Tap JWT and Nonce with Ktor](https://youtu.be/Q7PgQdXfETU)
+
+[Google One Tap with Jetpack Compose, Ktor HttpClient, ActivityResultRegistry](https://youtu.be/O_SBoS8aH7w)
+
+## Overview
 
 This branch validates a Google JWT token that's returned from the Google One Tap API.
 When the validation is successful for a new user, it inserts  basic user data (email, name)
