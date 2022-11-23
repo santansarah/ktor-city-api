@@ -13,6 +13,7 @@ enum class ErrorCode(val message: String) {
     UNKNOWN("An unknown error has occurred."),
     UNKNOWN_USER("This user doesn't exist."),
     UNKNOWN_APP("This app doesn't exist."),
+    UNKNOWN_CITY("This city doesn't exist."),
     APP_EXISTS("This app already exists."),
     INVALID_APP("UserId, email, app name, and app type can not be blank. Use 'dev' or 'prod' for app type."),
     DATABASE_ERROR("Unknown database error. Try again, and check your parameters."),

@@ -68,4 +68,52 @@ fun Route.cityRouting(
             }
         }
     }
+
+    route("cities/zip/{zipCode}") {
+        authenticate("city") {
+            get {
+
+                val principal = call.principal<AppPrincipal>()!!
+                val userWithApp = principal.userWithApp
+
+                val zipCode = call.parameters["zipCode"]?.toInt() ?: 0
+
+                if (zipCode == 0) {
+                    call.respond(
+                        status = HttpStatusCode.BadRequest,
+                        message = ResponseErrors(
+                            ErrorCode.INVALID_CITY_QUERY,
+                            ErrorCode.INVALID_CITY_QUERY.message
+                        )
+                    )
+                }
+
+                when (val dbResult = cityDaoImpl.getCityByZip(zipCode)) {
+                    is ServiceResult.Error -> {
+                        call.respond(
+                            status = HttpStatusCode.BadRequest,
+                            message = CityResponse(
+                                userWithApp = userWithApp,
+                                errors = listOf(
+                                    ResponseErrors(
+                                        dbResult.error,
+                                        dbResult.error.message
+                                    )
+                                )
+                            )
+                        )
+                    }
+                    is ServiceResult.Success -> {
+                        call.respond(
+                            status = HttpStatusCode.OK,
+                            message = CityResponse(
+                                userWithApp,
+                                listOf(dbResult.data)
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
 }

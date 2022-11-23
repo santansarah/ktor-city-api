@@ -1,6 +1,6 @@
 package com.santansarah.domain.models
 
-import com.santansarah.data.City
+import com.santansarah.data.models.City
 import com.santansarah.data.models.UserWithApp
 
 @kotlinx.serialization.Serializable

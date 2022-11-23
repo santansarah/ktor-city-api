@@ -1,7 +1,7 @@
 package com.santansarah.data.dao
 
 import com.santansarah.data.Cities
-import com.santansarah.data.City
+import com.santansarah.data.models.City
 import com.santansarah.domain.interfaces.ICityDao
 import com.santansarah.data.DatabaseFactory.dbQuery
 import com.santansarah.utils.ErrorCode
@@ -22,7 +22,8 @@ class CityDaoImpl : ICityDao {
                 lng = row[Cities.lng],
                 city = row[Cities.city],
                 state = row[Cities.state],
-                population = row[Cities.population]
+                population = row[Cities.population],
+                county = row[Cities.county]
             )
         } catch (e: Exception) {
             // turns out population was null for 1074 fields
@@ -72,6 +73,25 @@ class CityDaoImpl : ICityDao {
                 is ExposedSQLException -> {
                     println("exception from insert function: ${e.errorCode}")
                     ServiceResult.Error(ErrorCode.DATABASE_ERROR)
+                }
+                else -> ServiceResult.Error(ErrorCode.DATABASE_ERROR)
+            }
+        }
+    }
+
+    override suspend fun getCityByZip(zipCode: Int): ServiceResult<City> {
+        return try {
+            val dbCity = dbQuery {
+                Cities.select {
+                    Cities.zip eq zipCode
+                }.map(::resultRowToCity)
+                    .single()
+            }
+            ServiceResult.Success(dbCity)
+        } catch (e: Exception) {
+            when (e) {
+                is NoSuchElementException -> {
+                    ServiceResult.Error(ErrorCode.UNKNOWN_CITY)
                 }
                 else -> ServiceResult.Error(ErrorCode.DATABASE_ERROR)
             }

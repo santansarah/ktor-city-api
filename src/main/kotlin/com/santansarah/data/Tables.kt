@@ -49,4 +49,5 @@ object Cities : Table() {
     val city = varchar("city", 255)
     val state = varchar("state_id", 255)
     val population = integer("population")
+    val county = varchar("county_name", 255)
 }
