@@ -9,8 +9,7 @@ class ValidateUserApp() {
 
     operator fun invoke(userWithApp: UserWithApp): ServiceResult<Boolean> {
 
-        return if (userWithApp.appName.isBlank() ||
-            userWithApp.appType == AppType.NOTSET || userWithApp.email.isNullOrBlank())
+        return if (userWithApp.appName.isBlank() || userWithApp.appType == AppType.NOTSET)
             ServiceResult.Error(ErrorCode.INVALID_APP)
         else
             ServiceResult.Success(true)

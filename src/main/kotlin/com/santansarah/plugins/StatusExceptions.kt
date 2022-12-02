@@ -14,8 +14,10 @@ import com.santansarah.utils.GoogleException
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
+import io.ktor.server.plugins.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.request.*
+import io.ktor.server.request.ContentTransformationException
 import io.ktor.server.response.*
 import kotlinx.serialization.SerializationException
 
@@ -31,20 +33,26 @@ fun Application.configureStatusExceptions() {
             println(cause)
 
             when (cause) {
-                is SerializationException ->
-                with(call.request.path()) {
-                    when {
-                        startsWith(AppRoutes.USERS_ROUTE) -> sendBadUser(call)
-                        startsWith(AppRoutes.APPS_ROUTE) -> sendBadApp(call)
+                is SerializationException, is ContentTransformationException,
+                is BadRequestException ->
+                    with(call.request.path()) {
+                        when {
+                            startsWith(AppRoutes.USERS_ROUTE) -> sendBadUser(call)
+                            startsWith(AppRoutes.APPS_ROUTE) -> sendBadApp(call)
+                            startsWith(AppRoutes.APP_ROUTE) -> sendBadApp(call)
+                        }
                     }
-                }
                 is AuthenticationException ->
                     call.respond(
                         status = HttpStatusCode.Unauthorized,
-                        message = CityResponse(errors =listOf(
-                            ResponseErrors(ErrorCode.INVALID_API_KEY,
-                            ErrorCode.INVALID_API_KEY.message)
-                        ))
+                        message = CityResponse(
+                            errors = listOf(
+                                ResponseErrors(
+                                    ErrorCode.INVALID_API_KEY,
+                                    ErrorCode.INVALID_API_KEY.message
+                                )
+                            )
+                        )
                     )
                 /**
                  * If JWT validation fails and a GoogleException is thrown,
@@ -76,9 +84,11 @@ fun Application.configureStatusExceptions() {
 
 suspend fun sendBadApp(call: ApplicationCall) {
     val sampleApp = UserAppResponse(
-        UserWithApp(
-            email = "sample@email.com",
-            appName = "Your App's Name", appType = AppType.DEVELOPMENT
+        listOf(
+            UserWithApp(
+                email = "sample@email.com",
+                appName = "Your App's Name", appType = AppType.DEVELOPMENT
+            )
         ),
         listOf(ResponseErrors(ErrorCode.INVALID_JSON, ErrorCode.INVALID_JSON.message))
     )

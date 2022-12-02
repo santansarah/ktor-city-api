@@ -12,7 +12,7 @@ import io.ktor.server.auth.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun Route.cityRouting(
+fun Route.cities(
     cityDaoImpl: ICityDao
 ) {
     route("cities") {

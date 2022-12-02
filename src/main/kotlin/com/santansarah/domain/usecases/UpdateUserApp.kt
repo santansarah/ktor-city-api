@@ -1,21 +1,16 @@
 package com.santansarah.domain.usecases
 
 import com.santansarah.domain.interfaces.IUserAppDao
-import com.santansarah.domain.interfaces.IUserDao
 import com.santansarah.data.models.UserWithApp
 import com.santansarah.domain.models.ResponseErrors
 import com.santansarah.domain.models.UserAppResponse
 import com.santansarah.utils.ErrorCode
 import com.santansarah.utils.ServiceResult
-import com.santansarah.utils.toDatabaseString
-import java.time.LocalDateTime
 
-class InsertNewUserApp
+class UpdateUserApp
     (
     private val validateUserApp: ValidateUserApp,
-    private val generateApiKey: GenerateApiKey,
-    private val userAppDao: IUserAppDao,
-    private val userDao: IUserDao
+    private val userAppDao: IUserAppDao
 ) {
 
     suspend operator fun invoke(userWithApp: UserWithApp): UserAppResponse {
@@ -26,32 +21,24 @@ class InsertNewUserApp
             return userResponseError(userWithApp, validateAppResult.error)
         }
 
-        // make sure the user exists
-        val checkUser = userDao.doesUserExist(userWithApp.userId, userWithApp.email)
-        if (checkUser is ServiceResult.Error)
-            return userResponseError(userWithApp, checkUser.error)
-
         // make sure this app + app type is unique
         val checkAppAndType = userAppDao.checkForDupApp(userWithApp)
         if (checkAppAndType is ServiceResult.Error) {
             return userResponseError(userWithApp, checkAppAndType.error)
         }
 
-        // generate the api key and insert the new app
-        val apiKey = generateApiKey()
-        val dbResult = userAppDao.insertUserApp(userWithApp.copy(
-            apiKey = apiKey,
-            appCreateDate = LocalDateTime.now().toDatabaseString())
-        )
-
+        // run the update
+        val dbResult = userAppDao.updateAppById(userWithApp)
+        if (dbResult is ServiceResult.Success && !dbResult.data)
+            return userResponseError(userWithApp, ErrorCode.DATABASE_ERROR)
         if (dbResult is ServiceResult.Error)
             return userResponseError(userWithApp, dbResult.error)
 
-        // if the app was inserted, return the app w/the user info
-        return when (val newApp = userAppDao.getUserWithApp(apiKey)) {
-                is ServiceResult.Error -> userResponseError(userWithApp, newApp.error)
+        // return the updated app w/the user info
+        return when (val updatedApp = userAppDao.getAppById(userWithApp.userAppId)) {
+                is ServiceResult.Error -> userResponseError(userWithApp, updatedApp.error)
                 is ServiceResult.Success -> UserAppResponse(
-                    listOf(newApp.data)
+                    listOf(updatedApp.data)
                 )
         }
 

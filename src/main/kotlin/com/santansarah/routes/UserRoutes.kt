@@ -1,8 +1,12 @@
 package com.santansarah.routes
 
 import com.santansarah.data.models.User
+import com.santansarah.data.models.UserWithApp
 import com.santansarah.data.models.toUser
+import com.santansarah.domain.models.ResponseErrors
+import com.santansarah.domain.models.UserAppResponse
 import com.santansarah.domain.usecases.*
+import com.santansarah.utils.ErrorCode
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*

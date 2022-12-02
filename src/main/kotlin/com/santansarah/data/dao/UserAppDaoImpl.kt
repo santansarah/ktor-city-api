@@ -64,7 +64,7 @@ class UserAppDaoImpl : IUserAppDao {
 
     override suspend fun getUserWithApp(apiKey: String): ServiceResult<UserWithApp> {
         return try {
-           val userWithApp = dbQuery {
+            val userWithApp = dbQuery {
                 (Users innerJoin UserApps).select {
                     UserApps.apiKey eq apiKey
                 }
@@ -73,11 +73,11 @@ class UserAppDaoImpl : IUserAppDao {
             }
             ServiceResult.Success(userWithApp)
         } catch (e: Exception) {
-        when (e) {
-            is NoSuchElementException -> ServiceResult.Error(ErrorCode.UNKNOWN_APP)
-            else -> ServiceResult.Error(ErrorCode.DATABASE_ERROR)
+            when (e) {
+                is NoSuchElementException -> ServiceResult.Error(ErrorCode.UNKNOWN_APP)
+                else -> ServiceResult.Error(ErrorCode.DATABASE_ERROR)
+            }
         }
-    }
     }
 
     override suspend fun insertUserApp(userWithApp: UserWithApp): ServiceResult<UserApp> {
@@ -108,4 +108,56 @@ class UserAppDaoImpl : IUserAppDao {
         }
     }
 
+    override suspend fun getUserAppsByUserId(userId: Int): ServiceResult<List<UserWithApp>> {
+        return try {
+            val userAppList = dbQuery {
+                (Users innerJoin UserApps).select {
+                    UserApps.userId eq userId
+                }
+                    .map(::resultRowToUserWithApp)
+            }
+            ServiceResult.Success(userAppList)
+        } catch (e: Exception) {
+            ServiceResult.Error(ErrorCode.DATABASE_ERROR)
+        }
+    }
+
+    override suspend fun getAppById(appId: Int): ServiceResult<UserWithApp> {
+        return try {
+            val userWithApp = dbQuery {
+                (Users innerJoin UserApps).select {
+                    UserApps.userAppId eq appId
+                }
+                    .map(::resultRowToUserWithApp)
+                    .single()
+            }
+            ServiceResult.Success(userWithApp)
+        } catch (e: Exception) {
+            when (e) {
+                is NoSuchElementException -> ServiceResult.Error(ErrorCode.UNKNOWN_APP)
+                else -> ServiceResult.Error(ErrorCode.DATABASE_ERROR)
+            }
+        }
+    }
+
+    override suspend fun updateAppById(userWithApp: UserWithApp): ServiceResult<Boolean> {
+        return try {
+            val updateResult = dbQuery {
+                UserApps.update(
+                    { UserApps.userAppId eq userWithApp.userAppId }
+                )
+                {
+                    it[appName] = userWithApp.appName
+                    it[appType] = userWithApp.appType
+                }
+            }
+            // 0 = false, 1 = success/true
+            ServiceResult.Success(updateResult == 1)
+        } catch (e: Exception) {
+            when (e) {
+                is NoSuchElementException -> ServiceResult.Error(ErrorCode.UNKNOWN_APP)
+                else -> ServiceResult.Error(ErrorCode.DATABASE_ERROR)
+            }
+        }
+    }
 }

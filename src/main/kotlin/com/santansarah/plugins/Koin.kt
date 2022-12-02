@@ -29,6 +29,8 @@ val cityModule = module {
     single { ValidateUserEmail() }
     single { GetOrInsertUser(get()) }
     single { GetUser(get()) }
+    single { GetUserApps(get()) }
+    single { UpdateUserApp(get(), get()) }
 
     single<IUserAppDao> { UserAppDaoImpl() }
     single { ValidateUserApp() }

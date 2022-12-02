@@ -22,5 +22,7 @@ interface IUserAppDao {
     suspend fun getUserWithApp(apiKey: String): ServiceResult<UserWithApp>
     suspend fun checkForDupApp(userWithApp: UserWithApp): ServiceResult<Boolean>
     suspend fun insertUserApp(userWithApp: UserWithApp): ServiceResult<UserApp>
-
+    suspend fun getUserAppsByUserId(userId: Int): ServiceResult<List<UserWithApp>>
+    suspend fun getAppById(appId: Int): ServiceResult<UserWithApp>
+    suspend fun updateAppById(userWithApp: UserWithApp): ServiceResult<Boolean>
 }

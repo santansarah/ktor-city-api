@@ -12,7 +12,7 @@ data class UserResponse(
 
 @kotlinx.serialization.Serializable
 data class UserAppResponse(
-    val userWithApp: UserWithApp,
+    val apps: List<UserWithApp>,
     val errors: List<ResponseErrors> = emptyList()
 )
 
