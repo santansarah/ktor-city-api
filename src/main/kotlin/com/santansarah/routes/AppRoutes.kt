@@ -19,9 +19,6 @@ fun Route.apps(
     updateUserApp: UpdateUserApp
 ) {
 
-    /**
-     *
-     */
     route("apps/{userId}") {
         authenticate("app") {
             get {
